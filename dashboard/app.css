@@ -72,7 +72,7 @@ table.board { width: 100%; border-collapse: collapse; }
 .board tbody tr { cursor: pointer; }
 .board tbody tr:hover { background: #131b28; }
 .board tbody tr.selected { background: var(--accent-dim); }
-.board .num, .board th.num { text-align: right; font-family: var(--mono); }
+.board .num, .board th.num { text-align: right; font-family: var(--mono); white-space: nowrap; }
 td.rank { color: var(--faint); }
 td.proto .name { font-weight: 600; }
 td.proto .slug { color: var(--faint); font-family: var(--mono); font-size: 11.5px; }

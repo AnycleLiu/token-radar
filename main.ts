@@ -36,6 +36,7 @@ if (!existsSync(inputFile)) {
 }
 const out = arg('output', process.env.MAKEFUN_OUTPUT_DIR ?? '/output');
 
+const startedAt = Date.now();
 const snapshot = parseSnapshot(readFileSync(inputFile, 'utf8'));
 const { board, radar } = buildRadar(snapshot);
 const issue = boardIssue(board, snapshot);
@@ -82,5 +83,5 @@ writeFileSync(
 
 process.stdout.write(
   `token radar: ${snapshot.protocols.length} protocols, ${snapshot.watchlist.length} on the watchlist, ` +
-    `${board.length} rows scored (${radar.early_size} beyond the watchlist, ${radar.live_size} live shown aside)\n`,
+    `${board.length} rows scored (${radar.early_size} beyond the watchlist, ${radar.live_size} live shown aside), ${Date.now() - startedAt} ms\n`,
 );
