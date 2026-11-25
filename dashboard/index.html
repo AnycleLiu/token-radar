@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Launch Radar — pre-token protocols ranked by implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark">◎</div>
+    <div>
+      <h1>Token Launch Radar</h1>
+      <p class="tagline">Pre-token protocols, ranked by what their launch would be worth — and how to farm each one before it happens.</p>
+    </div>
+  </div>
+  <div class="snapshot-meta" id="snapshotMeta"></div>
+</header>
+
+<section class="stats" id="stats"></section>
+
+<section class="method" id="method"></section>
+
+<section class="controls" aria-label="Board controls">
+  <input id="q" type="search" placeholder="Search name or slug…" autocomplete="off">
+  <select id="scope">
+    <option value="all">Whole board</option>
+    <option value="watchlist">Watchlist only</option>
+    <option value="early">Beyond the watchlist</option>
+  </select>
+  <select id="category"><option value="">All categories</option></select>
+  <select id="chain"><option value="">All chains</option></select>
+  <select id="minTvl">
+    <option value="0">Any TVL</option>
+    <option value="10000000">TVL ≥ $10M</option>
+    <option value="50000000">TVL ≥ $50M</option>
+    <option value="250000000">TVL ≥ $250M</option>
+    <option value="1000000000">TVL ≥ $1B</option>
+  </select>
+  <select id="sort">
+    <option value="rank">Sort: implied value</option>
+    <option value="tvl">Sort: TVL</option>
+    <option value="change">Sort: 7-day change</option>
+    <option value="age">Sort: longest tokenless</option>
+    <option value="multiple">Sort: sector multiple</option>
+  </select>
+  <span class="count" id="count"></span>
+</section>
+
+<main class="layout">
+  <section class="board-wrap">
+    <table class="board" id="board">
+      <thead>
+        <tr>
+          <th class="num">#</th><th>Protocol</th><th>Category</th><th>Chains</th>
+          <th class="num">TVL</th><th class="num">7d</th><th class="num">Sector ×</th>
+          <th class="num">Implied value</th><th class="num">Farm</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="more" id="more"></p>
+  </section>
+  <aside class="detail" id="detail" aria-label="Protocol detail"></aside>
+</main>
+
+<section class="live" id="live"></section>
+
+<footer>
+  <p>Implied value is this board's own model claim, priced from the snapshot's figures alone — not a prediction that a token will be issued, or when. A protocol shown here records no token in the snapshot; that is a statement about the record, not about the world. Data: DefiLlama public API snapshot, frozen at the date above; this page makes no network requests.</p>
+</footer>
+
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
