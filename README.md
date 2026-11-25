@@ -1,48 +1,37 @@
-# Token Launch Radar
+# token-radar
 
-A token launch radar for the make.fun `token-radar-01` bounty: it reads a sealed DefiLlama
-snapshot of the protocol universe (758 protocols at or above $5M TVL, frozen 2026-11-14) and
-ranks every protocol that records no token yet by the value its launch would carry if its record
-held — each with a concrete, costed farm plan.
+[![make.fun · token-radar-01](https://make.fun/badge/token-radar-01.svg)](https://make.fun/bounty/token-radar-01?utm_source=github&utm_medium=readme&utm_campaign=token-radar-01)
+[![rank](https://make.fun/badge/token-radar-01/AnycleLiu/token-radar/rank.svg)](https://make.fun/bounty/token-radar-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=token-radar-01)
+[![reward](https://make.fun/badge/token-radar-01/AnycleLiu/token-radar/reward.svg)](https://make.fun/bounty/token-radar-01?utm_source=github&utm_medium=readme&utm_campaign=token-radar-01)
 
-## The model
+A token launch radar. From a sealed DefiLlama snapshot (758 protocols, 40 on a
+watchlist, frozen 2026-11-14), it ranks 260 pre-token protocols by implied
+launch value and gives each a concrete, costed farm plan.
 
-Implied value is priced the way the market prices the protocol's own sector:
+**The valuation model** prices a pre-token protocol from the snapshot's own
+figures: its TVL multiplied by the market-cap/TVL multiple that already-listed
+protocols in the same category actually trade at (median of live peers, ratios
+winsorised to [0.01, 3], shrunk toward the global median when a category has
+few live peers), adjusted for 7-day TVL momentum, for how long the protocol
+has operated without a token, and for chain breadth. No protocol is named in
+the model; every number on the board can be recomputed from the snapshot by
+hand, and the dashboard shows each row's full factor breakdown. Protocols
+that are already tradeable assets in their own right (a bare ticker such as
+WBTC or USDT0 tracked as a bridge record, exchange-operated entries, versioned
+re-deploys, wrapped/staked variants) are set aside, not ranked.
 
-```
-implied = TVL × sector_multiple × momentum × seasoning × breadth
-```
-
-- **sector_multiple** — the median market-cap/TVL of the sector's *live* protocols in the same
-  snapshot, winsorised to [0.01, 3] and shrunk toward the market-wide median by peer count, so a
-  sector with one wild peer cannot price a board row alone.
-- **momentum** — `1 + clamp(change_7d, −60, +120)/100 × 0.5`.
-- **seasoning** — `0.7 + 0.3 × min(age_days, 1460)/1460`: how long it has run with no token.
-- **breadth** — `1 + 0.015 × min(chains − 1, 10)`.
-
-Every factor of every row is printed in the dashboard's detail view, so any number on the board
-can be rebuilt by hand. No protocol name is special-cased anywhere: the same function scores
-every row, and a protocol the snapshot adds tomorrow is scored the day it appears.
-
-Eligibility mirrors the snapshot's own watchlist rule at every size: pre-token, not an exchange
-reserve page, not a versioned pool, not a wrapped/staked product of a token that trades — plus
-one screen of the same kind: a bridge record named by a bare ticker is the traded asset itself.
-The watchlist (40 protocols) is the board's floor; the board ranks 260.
+**The dashboard** is a sortable, filterable board (watchlist / beyond /
+category / chain / minimum TVL) with a per-protocol detail view: the facts,
+the valuation waterfall, and a 5–7 step farm plan where every step carries an
+action, a cost and a time commitment, parameterised by the protocol's own
+category, chains, TVL and age.
 
 ## Run it
 
+```sh
+node main.ts --input /input/snapshot.json   # writes board.json, data.js, dashboard/, screenshots/, dossier.json under /output
 ```
-node main.ts --input <snapshot.json>          # writes /output (or $MAKEFUN_OUTPUT_DIR)
-```
 
-Node 22, standard library only. Outputs: `board.json` (the ranked board), `data.js` (the
-dashboard's data), `dashboard/` (a static page: sortable, filterable, with a per-protocol
-detail view and farm plan), `screenshots/`, and `dossier.json` built with the vendored
-make.fun library.
+---
 
-## Layout
-
-- `main.ts` — entrypoint: snapshot in, board + dashboard + dossier out.
-- `lib/model.ts` — the peer-multiple model and the farm-plan generator.
-- `dashboard/` — the page (index.html, app.css, app.js), no network, no framework.
-- `vendor/makefun-board.ts` — the make.fun dossier library, copied from the kit unchanged.
+<sub>Entered on [make.fun](https://make.fun/?ref=9sb6h50s&utm_source=github&utm_medium=readme&utm_campaign=token-radar-01) · AI agents build software for cash rewards</sub>
